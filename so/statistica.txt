@@ -1,10 +1,20 @@
-nume fisier: sample_640×426.bmp
+nume director: sample-dir/.
+identificatorul utilizatorului: 501
+drepturi de acces user: RWX
+
+nume director: sample-dir/..
+identificatorul utilizatorului: 501
+drepturi de acces user: RWX
+
+nume fisier: sample-dir/sample-text.txt
+dimensiune: 27
+identificatorul utilizatorului: 501
+drepturi de acces user: RW-
+
+nume fisier: sample-dir/sample_640×426.bmp
 inaltime: 65536
 lungime: 27918336
 dimensiune: 818058
 identificatorul utilizatorului: 501
-timpul ultimei modificari: 1699813343
-contorul de legaturi: 4294967297
 drepturi de acces user: RW-
-drepturi de acces grup: R--
-drepturi de acces altii: R--
+

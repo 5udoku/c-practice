@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/radu/Developer/c/c-practice/so",
+      "program": "/Users/radu/Developer/c/c-practice/so/build/Debug/outDebug"
+    }
+  ]
+}
