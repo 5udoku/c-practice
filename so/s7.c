@@ -99,14 +99,18 @@ void write_file_info(int fd_stat, struct stat *file_stat, const char *file_path,
         }
         close(fd_bmp);
 
-        sprintf(stat_buffer, "nume fisier: %s\ninaltime: %d\nlungime: %d\ndimensiune: %ld\nidentificatorul utilizatorului: %d\ndrepturi de acces user: %c%c%c\n\n",
+        sprintf(stat_buffer, "nume fisier: %s\ninaltime: %d\nlungime: %d\ndimensiune: %ld\nidentificatorul utilizatorului: %d\ndrepturi de acces user: %c%c%c\ndrepturi de acces grup: %c%c%c\ndrepturi de acces altii: %c%c%c\n\n",
                 file_path, bmp_header.height, bmp_header.width, file_stat->st_size, file_stat->st_uid,
-                (file_stat->st_mode & S_IRUSR) ? 'R' : '-', (file_stat->st_mode & S_IWUSR) ? 'W' : '-', (file_stat->st_mode & S_IXUSR) ? 'X' : '-');
+                (file_stat->st_mode & S_IRUSR) ? 'R' : '-', (file_stat->st_mode & S_IWUSR) ? 'W' : '-', (file_stat->st_mode & S_IXUSR) ? 'X' : '-',
+                (file_stat->st_mode & S_IRGRP) ? 'R' : '-', (file_stat->st_mode & S_IWGRP) ? 'W' : '-', (file_stat->st_mode & S_IXGRP) ? 'X' : '-',
+                (file_stat->st_mode & S_IROTH) ? 'R' : '-', (file_stat->st_mode & S_IWOTH) ? 'W' : '-', (file_stat->st_mode & S_IXOTH) ? 'X' : '-');
     } else if (S_ISREG(file_stat->st_mode)) {
         // Pentru fisiere non-BMP
-        sprintf(stat_buffer, "nume fisier: %s\ndimensiune: %ld\nidentificatorul utilizatorului: %d\ndrepturi de acces user: %c%c%c\n\n",
+        sprintf(stat_buffer, "nume fisier: %s\ndimensiune: %ld\nidentificatorul utilizatorului: %d\ndrepturi de acces user: %c%c%c\ndrepturi de acces grup: %c%c%c\ndrepturi de acces altii: %c%c%c\n\n",
                 file_path, file_stat->st_size, file_stat->st_uid,
-                (file_stat->st_mode & S_IRUSR) ? 'R' : '-', (file_stat->st_mode & S_IWUSR) ? 'W' : '-', (file_stat->st_mode & S_IXUSR) ? 'X' : '-');
+                (file_stat->st_mode & S_IRUSR) ? 'R' : '-', (file_stat->st_mode & S_IWUSR) ? 'W' : '-', (file_stat->st_mode & S_IXUSR) ? 'X' : '-',
+                (file_stat->st_mode & S_IRGRP) ? 'R' : '-', (file_stat->st_mode & S_IWGRP) ? 'W' : '-', (file_stat->st_mode & S_IXGRP) ? 'X' : '-',
+                (file_stat->st_mode & S_IROTH) ? 'R' : '-', (file_stat->st_mode & S_IWOTH) ? 'W' : '-', (file_stat->st_mode & S_IXOTH) ? 'X' : '-');
     } else if (S_ISLNK(file_stat->st_mode)) {
         // Pentru legaturi simbolice
         struct stat target_stat;
@@ -115,14 +119,18 @@ void write_file_info(int fd_stat, struct stat *file_stat, const char *file_path,
             return;
         }
 
-        sprintf(stat_buffer, "nume legatura: %s\ndimensiune legatura: %ld\ndimensiune fisier target: %ld\ndrepturi de acces user legatura: %c%c%c\n\n",
+        sprintf(stat_buffer, "nume legatura: %s\ndimensiune legatura: %ld\ndimensiune fisier target: %ld\ndrepturi de acces user legatura: %c%c%c\ndrepturi de acces grup: %c%c%c\ndrepturi de acces altii: %c%c%c\n\n",
                 file_path, file_stat->st_size, target_stat.st_size,
-                (file_stat->st_mode & S_IRUSR) ? 'R' : '-', (file_stat->st_mode & S_IWUSR) ? 'W' : '-', (file_stat->st_mode & S_IXUSR) ? 'X' : '-');
+                (file_stat->st_mode & S_IRUSR) ? 'R' : '-', (file_stat->st_mode & S_IWUSR) ? 'W' : '-', (file_stat->st_mode & S_IXUSR) ? 'X' : '-',
+                (file_stat->st_mode & S_IRGRP) ? 'R' : '-', (file_stat->st_mode & S_IWGRP) ? 'W' : '-', (file_stat->st_mode & S_IXGRP) ? 'X' : '-',
+                (file_stat->st_mode & S_IROTH) ? 'R' : '-', (file_stat->st_mode & S_IWOTH) ? 'W' : '-', (file_stat->st_mode & S_IXOTH) ? 'X' : '-');
     } else if (S_ISDIR(file_stat->st_mode)) {
         // Pentru directoare
-        sprintf(stat_buffer, "nume director: %s\nidentificatorul utilizatorului: %d\ndrepturi de acces user: %c%c%c\n\n",
+        sprintf(stat_buffer, "nume director: %s\nidentificatorul utilizatorului: %d\ndrepturi de acces user: %c%c%c\ndrepturi de acces grup: %c%c%c\ndrepturi de acces altii: %c%c%c\n\n",
                 file_path, file_stat->st_uid,
-                (file_stat->st_mode & S_IRUSR) ? 'R' : '-', (file_stat->st_mode & S_IWUSR) ? 'W' : '-', (file_stat->st_mode & S_IXUSR) ? 'X' : '-');
+                (file_stat->st_mode & S_IRUSR) ? 'R' : '-', (file_stat->st_mode & S_IWUSR) ? 'W' : '-', (file_stat->st_mode & S_IXUSR) ? 'X' : '-',
+                (file_stat->st_mode & S_IRGRP) ? 'R' : '-', (file_stat->st_mode & S_IWGRP) ? 'W' : '-', (file_stat->st_mode & S_IXGRP) ? 'X' : '-',
+                (file_stat->st_mode & S_IROTH) ? 'R' : '-', (file_stat->st_mode & S_IWOTH) ? 'W' : '-', (file_stat->st_mode & S_IXOTH) ? 'X' : '-');
     }
 
     bytes_written = write(fd_stat, stat_buffer, strlen(stat_buffer));

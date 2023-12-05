@@ -1,15 +1,21 @@
 nume director: sample-dir/.
 identificatorul utilizatorului: 501
 drepturi de acces user: RWX
+drepturi de acces grup: R-X
+drepturi de acces altii: R-X
 
 nume director: sample-dir/..
 identificatorul utilizatorului: 501
 drepturi de acces user: RWX
+drepturi de acces grup: R-X
+drepturi de acces altii: R-X
 
 nume fisier: sample-dir/sample-text.txt
 dimensiune: 27
 identificatorul utilizatorului: 501
 drepturi de acces user: RW-
+drepturi de acces grup: R--
+drepturi de acces altii: R--
 
 nume fisier: sample-dir/sample_640×426.bmp
 inaltime: 65536
@@ -17,4 +23,6 @@ lungime: 27918336
 dimensiune: 818058
 identificatorul utilizatorului: 501
 drepturi de acces user: RW-
+drepturi de acces grup: R--
+drepturi de acces altii: R--
 
