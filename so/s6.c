@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <time.h>
 
 // Structura pentru BMP header
 typedef struct {
@@ -67,9 +68,9 @@ int main(int argc, char *argv[]) {
     int bytes_written;
 
     // Scrierea in fisierul de statistica
-    sprintf(stat_buffer, "nume fisier: %s\ninaltime: %d\nlungime: %d\ndimensiune: %ld\nidentificatorul utilizatorului: %d\ntimpul ultimei modificari: %ld\ncontorul de legaturi: %ld\ndrepturi de acces user: %c%c%c\ndrepturi de acces grup: %c%c%c\ndrepturi de acces altii: %c%c%c\n",
+    sprintf(stat_buffer, "nume fisier: %s\ninaltime: %d\nlungime: %d\ndimensiune: %ld\nidentificatorul utilizatorului: %d\ntimpul ultimei modificari: %s\ncontorul de legaturi: %ld\ndrepturi de acces user: %c%c%c\ndrepturi de acces grup: %c%c%c\ndrepturi de acces altii: %c%c%c\n",
             argv[1], bmp_header.height, bmp_header.width, file_stat.st_size, file_stat.st_uid,
-            file_stat.st_mtime, file_stat.st_nlink,
+            ctime(&file_stat.st_mtime), file_stat.st_nlink,
             (file_stat.st_mode & S_IRUSR) ? 'R' : '-', (file_stat.st_mode & S_IWUSR) ? 'W' : '-', (file_stat.st_mode & S_IXUSR) ? 'X' : '-',
             (file_stat.st_mode & S_IRGRP) ? 'R' : '-', (file_stat.st_mode & S_IWGRP) ? '-' : '-', (file_stat.st_mode & S_IXGRP) ? '-' : '-',
             (file_stat.st_mode & S_IROTH) ? 'R' : '-', (file_stat.st_mode & S_IWOTH) ? '-' : '-', (file_stat.st_mode & S_IXOTH) ? '-' : '-');
