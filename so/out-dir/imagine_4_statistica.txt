@@ -1,0 +1,9 @@
+nume fisier: in-dir/imagine_4.bmp
+inaltime: 65536
+lungime: 85786624
+dimensiune: 2995046
+identificatorul utilizatorului: 501
+drepturi de acces user: RW-
+drepturi de acces grup: RW-
+drepturi de acces altii: R--
+

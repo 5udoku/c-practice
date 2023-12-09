@@ -1,11 +1,21 @@
-nume fisier: sample_640×426.bmp
-inaltime: 65536
-lungime: 27918336
-dimensiune: 818058
+nume director: in-dir/.
 identificatorul utilizatorului: 501
-timpul ultimei modificari: Tue Dec  5 22:39:40 2023
+drepturi de acces user: RWX
+drepturi de acces grup: R-X
+drepturi de acces altii: R-X
 
-contorul de legaturi: 1
+nume director: in-dir/..
+identificatorul utilizatorului: 501
+drepturi de acces user: RWX
+drepturi de acces grup: R-X
+drepturi de acces altii: R-X
+
+nume fisier: in-dir/image_1.bmp
+inaltime: 65536
+lungime: 30605312
+dimensiune: 219634
+identificatorul utilizatorului: 501
 drepturi de acces user: RW-
-drepturi de acces grup: R--
+drepturi de acces grup: RW-
 drepturi de acces altii: R--
+

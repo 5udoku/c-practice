@@ -1,0 +1,9 @@
+nume fisier: in-dir/imagine_3.bmp
+inaltime: 65536
+lungime: 16777216
+dimensiune: 196666
+identificatorul utilizatorului: 501
+drepturi de acces user: RW-
+drepturi de acces grup: RW-
+drepturi de acces altii: R--
+

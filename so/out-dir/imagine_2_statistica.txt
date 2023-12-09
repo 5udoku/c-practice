@@ -1,0 +1,9 @@
+nume fisier: in-dir/imagine_2.bmp
+inaltime: 65536
+lungime: 27918336
+dimensiune: 818058
+identificatorul utilizatorului: 501
+drepturi de acces user: RW-
+drepturi de acces grup: RW-
+drepturi de acces altii: R--
+

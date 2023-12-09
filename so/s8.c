@@ -19,6 +19,8 @@ typedef struct {
 
 void process_entry(const char *entry_name, const char* in_dir, const char* out_dir);
 void write_file_info(int stat_file, struct stat *file_stat, const char *file_path, int is_bmp);
+void process_bmp(const char *entry_name, const char* in_dir);
+char* get_entry_name_without_extension(const char* str);
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
@@ -65,7 +67,7 @@ int main(int argc, char *argv[]) {
             }
             if(pid == 0){
                 // Child process for BMP file
-                
+                process_bmp(entry->d_name, argv[1]);
                 exit(0);
             }
             nProc++;
@@ -74,9 +76,11 @@ int main(int argc, char *argv[]) {
 
     // Wait for child processes
     int status;
+    pid_t pid;
     for(int i = 0; i < nProc; i++){
+        pid = wait(&status);
         wait(&status);
-        printf("> Child with pid %d exited. <\n", status);
+        printf("S-a incheiat procesul cu pid-ul %d si codul %d\n", pid, WEXITSTATUS(status));
     }
 
     closedir(inDir);
@@ -99,25 +103,18 @@ void process_entry(const char *entry_name, const char* in_dir, const char* out_d
     }
 
     // Get entry name without extension inside a buffer
-    // const char* dot = strchr(entry_name, '.');
-    // int buffer_size = dot - 
-    // char buffer[32];
-    // int buffer_size = 32;
-    // if(dot - entry_name > 32){
-    //     strncpy(buffer, entry_name, 32);
-    // } else {
-    //     strcpy(buffer, entry_name);
-    // }
+    char* entry_name_ne = get_entry_name_without_extension(entry_name);
     
     // Create new statistics file
-    path_length = strlen(out_dir) + strlen(entry_name) + 17;
+    path_length = strlen(out_dir) + strlen(entry_name_ne) + 17;
     char* outFile = (char*)malloc(path_length * sizeof(char));
-    sprintf(outFile, "%s/%s_statistica.txt", out_dir, entry_name);
+    sprintf(outFile, "%s/%s_statistica.txt", out_dir, entry_name_ne);
     int stat_file = open(outFile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (stat_file == -1) {
         perror("Error creating statistics file");
         free(inFile);
         free(outFile);
+        free(entry_name_ne);
         return;
     }
     
@@ -126,10 +123,11 @@ void process_entry(const char *entry_name, const char* in_dir, const char* out_d
         is_bmp = 1;
     }
 
-    write_file_info(stat_file, &file_stat, entry_name, is_bmp);
+    write_file_info(stat_file, &file_stat, inFile, is_bmp);
     close(stat_file);
     free(inFile);
     free(outFile);
+    free(entry_name_ne);
 }
 
 void write_file_info(int stat_file, struct stat *file_stat, const char *file_path, int is_bmp) {
@@ -188,4 +186,83 @@ void write_file_info(int stat_file, struct stat *file_stat, const char *file_pat
     if (bytes_written == -1) {
         perror("Error writing to statistics file");
     }
+}
+
+void process_bmp(const char *entry_name, const char* in_dir){
+    // Dynamically create path to input entry
+    int path_length = strlen(in_dir) + strlen(entry_name) + 2;
+    char* bmpFile = (char*)malloc(path_length * sizeof(char));
+    sprintf(bmpFile, "%s/%s", in_dir, entry_name);
+
+
+    printf("%s\n", bmpFile);
+
+    int fd = open(bmpFile, O_RDWR);
+    if(fd == -1){
+        perror("Error opening BMP file");
+        free(bmpFile);
+        return;
+    }
+    
+    BMPHeader bmp_header;
+    if (read(fd, &bmp_header, sizeof(BMPHeader)) != sizeof(BMPHeader)) {
+        perror("Error reading BMP header");
+        close(fd);
+        free(bmpFile);
+        return;
+    }
+
+    // Seek the beginning of Raster Data
+    if (lseek(fd, bmp_header.offset, SEEK_SET) == -1) {
+        perror("Error seeking to pixel data");
+        close(fd);
+        free(bmpFile);
+        return;
+    }
+
+    int width = bmp_header.width;
+    int height = bmp_header.height;
+    unsigned char pixel[3];
+
+    for (int y = 0; y < height / 4; y++) {
+        for (int x = 0; x < width / 4; x++) {
+            if (read(fd, &pixel, 3) != 3) {
+                perror("Error reading pixel");
+                close(fd);
+                free(bmpFile);
+                return;
+            }
+
+            uint8_t gray = (uint8_t)(0.299 * pixel[2] + 0.587 * pixel[1] + 0.114 * pixel[0]);
+            pixel[0] = pixel[1] = pixel[2] = gray;
+
+            if (lseek(fd, -3, SEEK_CUR) == -1) {
+                perror("Error seeking back");
+                close(fd);
+                free(bmpFile);
+                return;
+            }
+
+            if (write(fd, &pixel, 3) != 3) {
+                perror("Error writing pixel");
+                close(fd);
+                free(bmpFile);
+                return;
+            }
+        }
+    }
+
+    close(fd);
+    free(bmpFile);
+}
+
+char* get_entry_name_without_extension(const char* str){
+    char* buffer;
+    const char* dot = strchr(str, '.');
+    int buffer_size = dot - str;
+
+    buffer = (char*)malloc(buffer_size * sizeof(char));
+    strncpy(buffer, str, buffer_size);
+
+    return buffer;
 }
